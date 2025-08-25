@@ -17,9 +17,7 @@ struct ContentView: View {
         ScrollView(.vertical) {
             VStack {
                 SearchBarView(text: $searchText, onSearch: {
-                    Task {
-                        await vm.fetchArtist(query: searchText)
-                    }
+                    Task { await vm.fetchArtist(query: searchText) }
                 })
                 contentView
                     .onAppear {
