@@ -56,7 +56,7 @@ extension API {
             // decoding the data
             do {
                 
-//                print("Received data: \(String(data: data, encoding: .utf8) ?? "Unable to decode data")")
+                print("Received data: \(String(data: data, encoding: .utf8) ?? "Unable to decode data")")
                 // try decoder.decode(Response.self, from: data, configuration: .decodingConfiguration)
                 let decodedData = try decoder.decode(Response.self, from: data)
                 

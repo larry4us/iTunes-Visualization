@@ -21,6 +21,8 @@ extension API {
                     var kind: String
                     var artistName: String
                     var artworkUrl100: String
+                    var previewUrl: String
+                    
                     var description: String {
                         "tipo: \(kind), artista: \(artistName)"
                     }
@@ -29,6 +31,7 @@ extension API {
                         case kind
                         case artistName
                         case artworkUrl100
+                        case previewUrl
                     }
                 }
             }

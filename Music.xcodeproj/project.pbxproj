@@ -72,10 +72,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		7F9F4AD42E4A7168003616FC = {
+		7F20AFBB2E6638D600381EB3 /* New Group */ = {
 			isa = PBXGroup;
 			children = (
 				7F9F4ADF2E4A7168003616FC /* Music */,
+			);
+			path = "New Group";
+			sourceTree = "<group>";
+		};
+		7F9F4AD42E4A7168003616FC = {
+			isa = PBXGroup;
+			children = (
+				7F20AFBB2E6638D600381EB3 /* New Group */,
 				7F9F4AED2E4A716A003616FC /* MusicTests */,
 				7F9F4AF72E4A716A003616FC /* MusicUITests */,
 				7F9F4ADE2E4A7168003616FC /* Products */,

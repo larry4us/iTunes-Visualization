@@ -10,11 +10,9 @@ import SwiftUI
 @main
 struct MusicApp: App {
     
-    let vm: MusicViewModel = .init()
-    
     var body: some Scene {
         WindowGroup {
-            ContentView(vm: vm)
+            CoordinatorView()
         }
     }
 }
