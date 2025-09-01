@@ -13,7 +13,7 @@ struct ContentView: View {
     let columns = Array(repeating: GridItem(.flexible(minimum: 50)), count: 2)
     @StateObject var vm: MusicViewModel
     @State var searchText = ""
-    @State var numberOfResults = 6
+    @State var numberOfResults = 10
     
     var body: some View {
         SearchBarView(text: $searchText, numberOfResults: $numberOfResults, onSearch: {
@@ -33,6 +33,9 @@ struct ContentView: View {
         }
         .contentMargins(16, for: .scrollContent)
         .scrollTargetBehavior(.paging)
+        .onChange(of: numberOfResults) { oldValue, newValue in
+            Task { await vm.fetchArtistWithLimit(query: searchText, limit: numberOfResults)}
+        }
     }
     
     @ViewBuilder
