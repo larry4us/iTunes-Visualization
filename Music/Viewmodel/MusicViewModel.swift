@@ -49,15 +49,26 @@ class MusicViewModel: ObservableObject {
         }
     }
     
-    private func fetchArtistSearch(query: String) async throws -> API.Types.Response.ArtistSearch {
+    @MainActor
+    func fetchArtistWithLimit(query: String, limit: Int) async {
+        do {
+            let artistSearch = try await fetchArtistSearch(query: query, limit: limit)
+            state = .loaded(artistSearch)
+            artists = artistSearch.results
+        } catch let error {
+            state = .error("\(error)")
+        }
+    }
+    
+    private func fetchArtistSearch(query: String, limit: Int? = nil) async throws -> API.Types.Response.ArtistSearch {
         
-        //let body = API.Types.Request.Search(term: query)
         let body = API.Types.Request.Empty()
         
         let artistSearch: API.Types.Response.ArtistSearch = try await apiClient.fetch(
             method: .get,
             body: body,
-            endpoint: .search(query: query)
+            endpoint: .search(query: query),
+            limit: limit
         )
         
         return artistSearch

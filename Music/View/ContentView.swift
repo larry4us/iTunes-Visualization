@@ -10,21 +10,29 @@ import SwiftUI
 struct ContentView: View {
     
     typealias artistSearch = API.Types.Response.ArtistSearch
+    let columns = Array(repeating: GridItem(.flexible(minimum: 50)), count: 2)
     @StateObject var vm: MusicViewModel
     @State var searchText = ""
+    @State var numberOfResults = 6
     
     var body: some View {
+        SearchBarView(text: $searchText, numberOfResults: $numberOfResults, onSearch: {
+            Task { await vm.fetchArtistWithLimit(query: searchText, limit: numberOfResults) }
+        })
+        Text("\(vm.artists.count)")
         ScrollView(.vertical) {
-            VStack {
-                SearchBarView(text: $searchText, onSearch: {
-                    Task { await vm.fetchArtist(query: searchText) }
-                })
+            LazyVGrid(columns: columns) {
                 contentView
                     .onAppear {
                         Task {await vm.refresh()}
                     }
+                    .containerRelativeFrame(.vertical, count: 2, spacing: 16)
+                
             }
+            .scrollTargetLayout()
         }
+        .contentMargins(16, for: .scrollContent)
+        .scrollTargetBehavior(.paging)
     }
     
     @ViewBuilder
@@ -33,12 +41,8 @@ struct ContentView: View {
         case .error(let error):
             Text("houve um erro: \(error)")
         case .loaded:
-            VStack{
-                Text("\(vm.artists.count)")
-                
-                ForEach(vm.artists){ artist in
-                    artistCard(artist: artist)
-                }
+            ForEach(vm.artists){ artist in
+                artistCard(artist: artist)
             }
         case .loading:
             ProgressView()
@@ -57,7 +61,7 @@ struct ContentView: View {
             }
             .frame(width: 50, height: 50)
             .clipShape(RoundedRectangle(cornerRadius: 8))
-
+            
             VStack(alignment: .leading) {
                 Text(artist.artistName)
                     .font(.headline)
@@ -65,12 +69,14 @@ struct ContentView: View {
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
-
+            
             Spacer()
         }
+        .frame(width: 150, height: 200)
         .padding(8)
         .background(Color(.systemGray6))
         .cornerRadius(12)
+        
     }
 }
 

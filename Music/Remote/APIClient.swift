@@ -15,21 +15,23 @@ extension API {
             case invalidEncoding(String)
         }
         
-        //static let shared = Client()
-        
         let encoder = JSONEncoder()
         let decoder = JSONDecoder()
         
         func fetch<Request:Encodable, Response: Decodable> (
             method: Types.method,
             body: Request? = nil,
-            endpoint: Types.Endpoint
+            endpoint: Types.Endpoint,
+            limit: Int? = nil
         ) async throws -> Response {
             
             // creating the URL request
-            //var urlRequest = URLRequest(url: endpoint.url)
-            var urlRequest = URLRequest(url: endpoint.url)
-            //URLRequest(url: URL(string: "https://itunes.apple.com/search?term=justin&media=music&attribute=artistTerm")!)
+            var url = endpoint.url
+            if let limit {
+                url = url.appending(queryItems: [URLQueryItem(name: "limit", value: "\(limit)")])
+            }
+            
+            var urlRequest = URLRequest(url: url)
             urlRequest.httpMethod = method.rawValue.uppercased()
             
             // if not a get method, try to fill in the body
@@ -54,7 +56,7 @@ extension API {
             // decoding the data
             do {
                 
-                print("Received data: \(String(data: data, encoding: .utf8) ?? "Unable to decode data")")
+//                print("Received data: \(String(data: data, encoding: .utf8) ?? "Unable to decode data")")
                 // try decoder.decode(Response.self, from: data, configuration: .decodingConfiguration)
                 let decodedData = try decoder.decode(Response.self, from: data)
                 
