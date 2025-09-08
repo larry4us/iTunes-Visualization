@@ -53,6 +53,12 @@ class AudioPlayerService: ObservableObject {
         isPlaying = false
     }
     
+    func stopPlaying() {
+        player?.pause()
+        player?.seek(to: .zero)
+        isPlaying = false
+    }
+    
     func togglePlayPause(url: URL) {
         if isPlaying {
             pause()

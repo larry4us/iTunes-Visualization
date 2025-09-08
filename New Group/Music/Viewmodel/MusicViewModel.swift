@@ -20,17 +20,17 @@ class MusicViewModel: ObservableObject {
         case error(String)
     }
     
-    @Published var state: State = .loading
+    @Published var state: State
     
     init() {
         artists = []
-        state = .loading
+        state = .loaded(ArtistSearch(results: [], searchTerm: ""))
     }
     
     @MainActor
     func refresh() async {
         do {
-            let artistSearch = try await fetchArtistSearch(query: "justin")
+            let artistSearch = try await fetchArtistSearch(query: "")
             state = .loaded(artistSearch)
             artists = artistSearch.results
         } catch let error {
@@ -64,12 +64,14 @@ class MusicViewModel: ObservableObject {
         
         let body = API.Types.Request.Empty()
         
-        let artistSearch: API.Types.Response.ArtistSearch = try await apiClient.fetch(
+        var artistSearch: API.Types.Response.ArtistSearch = try await apiClient.fetch(
             method: .get,
             body: body,
             endpoint: .search(query: query),
             limit: limit
         )
+        
+        artistSearch.searchTerm = query
         
         return artistSearch
     }

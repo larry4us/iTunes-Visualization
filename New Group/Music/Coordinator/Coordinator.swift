@@ -27,7 +27,6 @@ class Coordinator: ObservableObject {
         path.removeLast()
     }
 
-    
     func popToRoot() {
         path.removeLast(path.count)
     }
@@ -36,7 +35,7 @@ class Coordinator: ObservableObject {
     func build(page: Page) -> some View {
         switch page {
         case .home:
-            ContentView(vm: self.viewmodel)
+            HomeView(vm: self.viewmodel)
         case .audioPreview(let url):
             AudioPreviewView(previewUrlString: url)
         }

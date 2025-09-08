@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct HomeView: View {
     
     @EnvironmentObject var coordinator: Coordinator
     
@@ -25,13 +25,8 @@ struct ContentView: View {
         })
         Text("\(vm.artists.count)")
         ScrollView(.vertical) {
-            LazyVGrid(columns: columns) {
+            VStack {
                 contentView
-                    .onAppear {
-                        Task {await vm.refresh()}
-                    }
-                    .containerRelativeFrame(.vertical, count: 2, spacing: 16)
-                
             }
             .scrollTargetLayout()
         }
@@ -41,6 +36,8 @@ struct ContentView: View {
             Task { await vm.fetchArtistWithLimit(query: searchText, limit: numberOfResults)}
         }
     }
+    
+    
     
     @ViewBuilder
     var contentView: some View {
@@ -75,14 +72,14 @@ struct ContentView: View {
                 VStack(alignment: .leading) {
                     Text(artist.artistName)
                         .font(.headline)
+                        .lineLimit(1)
+                    
                     Text(artist.kind.capitalized)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
-                
                 Spacer()
             }
-            .frame(width: 150, height: 200)
             .padding(8)
             .background(Color(.systemGray6))
             .cornerRadius(12)
@@ -91,5 +88,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView(vm: .init())
+    HomeView(vm: .init())
 }

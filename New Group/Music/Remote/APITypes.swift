@@ -13,8 +13,9 @@ extension API {
         
         enum Response {
             struct ArtistSearch: Decodable {
-                var resultCount: Int
+                var resultCount: Int {results.count}
                 var results: [Result]
+                var searchTerm: String = ""
                 
                 struct Result: Decodable, CustomStringConvertible, Identifiable {
                     var id = UUID()
@@ -33,6 +34,32 @@ extension API {
                         case artworkUrl100
                         case previewUrl
                     }
+                }
+                
+                private enum CodingKeys: String, CodingKey {
+                    case results
+                }
+            }
+            
+            struct SongSearch: Decodable {
+                var resultCount: Int { results.count}
+                var results: [Result]
+                
+                struct Result: Decodable, CustomStringConvertible, Identifiable {
+                    var id = UUID()
+                    var kind: String
+                    var artistName: String
+                    var collectionName: String
+                    var trackName: String
+                    
+                    var description: String {
+                        "tipo: \(kind), artista: \(artistName), álbum: \(collectionName), música: \(trackName)"
+                    }
+                    
+//                    private enum CodingKeys: String, CodingKey {
+//                        case kind
+//                        case artistName
+//                    }
                 }
             }
         }
