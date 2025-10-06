@@ -9,14 +9,16 @@ import Foundation
 import SwiftUI
 
 enum Page: Hashable {
-    case home
+    case iTunesHome
     case audioPreview(url: String)
+    case spotifyHome
 }
 
 class Coordinator: ObservableObject {
     
     @Published var path = NavigationPath()
     
+    let spotifyViewModel: SpotifyAlbumListViewModel = .init()
     let viewmodel: MusicViewModel = .init()
     
     func push(_ page: Page){
@@ -34,10 +36,13 @@ class Coordinator: ObservableObject {
     @ViewBuilder
     func build(page: Page) -> some View {
         switch page {
-        case .home:
+        case .iTunesHome:
             SongSearchView(vm: self.viewmodel)
         case .audioPreview(let url):
             AudioPreviewView(previewUrlString: url)
+        case .spotifyHome:
+            SpotifyAlbumListView(viewModel: self.spotifyViewModel)
         }
+    
     }
 }
