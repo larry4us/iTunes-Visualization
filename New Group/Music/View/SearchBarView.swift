@@ -17,7 +17,7 @@ struct SearchBarView: View {
     var onSearch: () -> Void
     
     // Opções de resultados que vamos oferecer
-    private let resultOptions = [10, 25, 50]
+    private let resultOptions = [1,5, 10, 25, 50]
     
     var body: some View {
         HStack {
@@ -26,7 +26,7 @@ struct SearchBarView: View {
                 .foregroundColor(.secondary)
             
             // Campo de Texto
-            TextField("Buscar artistas...", text: $text)
+            TextField("Buscar músicas...", text: $text)
                 .onSubmit {
                     onSearch()
                 }
@@ -54,7 +54,6 @@ struct SearchBarView: View {
                 }
             }
             .pickerStyle(.menu) // Estilo que o transforma em um menu compacto
-            
         }
         .padding(8)
         .background(Color(.systemGray6))

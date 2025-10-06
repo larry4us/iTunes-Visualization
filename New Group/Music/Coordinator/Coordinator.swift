@@ -35,7 +35,7 @@ class Coordinator: ObservableObject {
     func build(page: Page) -> some View {
         switch page {
         case .home:
-            HomeView(vm: self.viewmodel)
+            SongSearchView(vm: self.viewmodel)
         case .audioPreview(let url):
             AudioPreviewView(previewUrlString: url)
         }

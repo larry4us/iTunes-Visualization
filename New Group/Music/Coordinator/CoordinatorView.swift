@@ -1,13 +1,5 @@
 //
 //  CoordinatorView.swift
-//  Music
-//
-//  Created by Pedro Larry Rodrigues Lopes on 01/09/25.
-//
-
-
-//
-//  CoordinatorView.swift
 //  CookiesOnCloud
 //
 //  Created by Pedro Larry Rodrigues Lopes on 29/07/25.

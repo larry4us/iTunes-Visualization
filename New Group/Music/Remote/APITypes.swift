@@ -12,8 +12,8 @@ extension API {
     enum Types {
         
         enum Response {
-            struct ArtistSearch: Decodable {
-                var resultCount: Int {results.count}
+            struct SongSearch: Decodable {
+                var resultCount: Int
                 var results: [Result]
                 var searchTerm: String = ""
                 
@@ -23,6 +23,7 @@ extension API {
                     var artistName: String
                     var artworkUrl100: String
                     var previewUrl: String
+                    var trackName: String
                     
                     var description: String {
                         "tipo: \(kind), artista: \(artistName)"
@@ -33,34 +34,15 @@ extension API {
                         case artistName
                         case artworkUrl100
                         case previewUrl
+                        case trackName
                     }
                 }
                 
                 private enum CodingKeys: String, CodingKey {
+                    case resultCount
                     case results
                 }
-            }
-            
-            struct SongSearch: Decodable {
-                var resultCount: Int { results.count}
-                var results: [Result]
-                
-                struct Result: Decodable, CustomStringConvertible, Identifiable {
-                    var id = UUID()
-                    var kind: String
-                    var artistName: String
-                    var collectionName: String
-                    var trackName: String
-                    
-                    var description: String {
-                        "tipo: \(kind), artista: \(artistName), álbum: \(collectionName), música: \(trackName)"
-                    }
-                    
-//                    private enum CodingKeys: String, CodingKey {
-//                        case kind
-//                        case artistName
-//                    }
-                }
+
             }
         }
         

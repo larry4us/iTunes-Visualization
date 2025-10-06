@@ -7,23 +7,22 @@
 
 import SwiftUI
 
-struct HomeView: View {
+struct SongSearchView: View {
     
     @EnvironmentObject var coordinator: Coordinator
     
-    typealias artistSearch = API.Types.Response.ArtistSearch
+    typealias artistSearch = API.Types.Response.SongSearch
     
     let columns = Array(repeating: GridItem(.flexible(minimum: 50)), count: 2)
     
     @StateObject var vm: MusicViewModel
     @State var searchText = ""
-    @State var numberOfResults = 10
     
     var body: some View {
-        SearchBarView(text: $searchText, numberOfResults: $numberOfResults, onSearch: {
-            Task { await vm.fetchArtistWithLimit(query: searchText, limit: numberOfResults) }
+        SearchBarView(text: $searchText, numberOfResults: $vm.numberOfResults, onSearch: {
+            Task { await vm.fetchSongsWithLimit(query: searchText, limit: vm.numberOfResults) }
         })
-        Text("\(vm.artists.count)")
+        Text("\(vm.songs.count)")
         ScrollView(.vertical) {
             VStack {
                 contentView
@@ -32,12 +31,10 @@ struct HomeView: View {
         }
         .contentMargins(16, for: .scrollContent)
         .scrollTargetBehavior(.paging)
-        .onChange(of: numberOfResults) { oldValue, newValue in
-            Task { await vm.fetchArtistWithLimit(query: searchText, limit: numberOfResults)}
+        .onChange(of: vm.numberOfResults) { _ , _ in
+            Task { await vm.refresh()}
         }
-    }
-    
-    
+    } 
     
     @ViewBuilder
     var contentView: some View {
@@ -45,7 +42,7 @@ struct HomeView: View {
         case .error(let error):
             Text("houve um erro: \(error)")
         case .loaded:
-            ForEach(vm.artists){ artist in
+            ForEach(vm.songs){ artist in
                 artistCard(artist: artist)
             }
         case .loading:
@@ -70,7 +67,7 @@ struct HomeView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 8))
                 
                 VStack(alignment: .leading) {
-                    Text(artist.artistName)
+                    Text(artist.trackName)
                         .font(.headline)
                         .lineLimit(1)
                     
@@ -88,5 +85,5 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView(vm: .init())
+    SongSearchView(vm: .init())
 }
