@@ -11,7 +11,7 @@ import Combine
 extension API.Spotify {
     
     class Client {
-
+        
     }
 }
 

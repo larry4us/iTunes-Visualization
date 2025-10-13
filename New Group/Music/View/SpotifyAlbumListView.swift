@@ -17,8 +17,8 @@ struct SpotifyAlbumListView: View {
     var body: some View {
         NavigationView {
             // get data
-            let albumList = viewModel.getAlbumList()
-            let albumImageUrls = viewModel.getAlbumImageUrls()
+            let albumList = viewModel.albumList
+            let albumImageUrls = viewModel.albumImageUrls
             // list for albums
             List(Array(zip(albumList, albumImageUrls)), id: \.0) { album, albumImageUrl in
                 HStack {

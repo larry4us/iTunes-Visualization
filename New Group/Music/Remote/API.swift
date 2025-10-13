@@ -8,6 +8,5 @@
 import Foundation
 
 enum API {
-    
     enum Spotify {}
 }

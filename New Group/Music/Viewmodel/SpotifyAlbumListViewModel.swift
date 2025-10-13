@@ -12,14 +12,19 @@ import Combine
 class SpotifyAlbumListViewModel: ObservableObject {
     typealias Response = API.Spotify.Types.Response
     private var cancellables = Set<AnyCancellable>()
+    private var donLSpotifyID = "6U98XWjrUPnPtPBjEprDmu"
     
     // async publishable data.
-    @Published private var albumList: Array<Response.Item> = []
-    @Published private var albumImageUrls: Array<URL> = []
+    @Published var albumList: Array<Response.Item> = []
+    @Published var albumImageUrls: Array<URL> = []
+    @Published var playlists: Array<API.Spotify.Types.Response.PlaylistObject> = []
     
     init() {
+        subscribeToDataProviders()
+        
         // set artist id for request
-        DataProvider.shared.getArtistsAlbums(id: "6U98XWjrUPnPtPBjEprDmu")
+        DataProvider.shared.getArtistAlbums(id: donLSpotifyID)
+        DataProvider.shared.getUserPlaylists(userID: "larry4us")
     }
     
     func getData() {
@@ -31,11 +36,29 @@ class SpotifyAlbumListViewModel: ObservableObject {
                 self.albumList = items
                 self.setAlbumImageUrls(with: items)
             }).store(in: &cancellables)
+        
     }
     
-    // return albumList to view
-    func getAlbumList() -> Array<Response.Item> {
-        return albumList
+    private func subscribeToDataProviders() {
+        // Albums
+        DataProvider.shared.artistAlbumsSubject
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] items in
+                guard let self = self else { return }
+                self.albumList = items
+                self.setAlbumImageUrls(with: items)
+            }
+            .store(in: &cancellables)
+        
+        // Playlists
+        DataProvider.shared.userPlaylistSubject
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] playlists in
+                guard let self = self else { return }
+                print("🎵 Received playlists:", playlists.map(\.name))
+                self.playlists = playlists
+            }
+            .store(in: &cancellables)
     }
     
     // some collection type transactions
@@ -46,10 +69,5 @@ class SpotifyAlbumListViewModel: ObservableObject {
                 albumImageUrls.append(imageUrl)
             }
         }
-    }
-    
-    // return albumImageList to view
-    func getAlbumImageUrls() -> Array<URL> {
-        return albumImageUrls
     }
 }

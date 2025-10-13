@@ -16,6 +16,7 @@ class DataProvider {
     
     // Subscribers
     var artistAlbumsSubject = PassthroughSubject<[API.Spotify.Types.Response.Item], Never>()
+    var userPlaylistSubject = PassthroughSubject<[API.Spotify.Types.Response.PlaylistObject], Never>()
     
     private init() {}
 }
@@ -24,7 +25,7 @@ extension DataProvider {
     
     typealias Response = API.Spotify.Types.Response
     
-    func getArtistsAlbums(id: String) {
+    func getArtistAlbums(id: String) {
         // request url
         let url = URL(string: "https://api.spotify.com/v1/artists/\(id)/albums")
         // request model with decodable ArtistAlbums model and http method
@@ -44,5 +45,27 @@ extension DataProvider {
             // publish the data
             self.artistAlbumsSubject.send(items)
         }).store(in: &self.cancellables)
+    }
+    
+    func getUserPlaylists(userID: String) {
+        // request url
+        let url = URL(string: "https://api.spotify.com/v1/users/\(userID)/playlists")
+        // request model with decodable ArtistAlbums model and http method
+        let model = APIManager<Response.UserPlaylist>.RequestModel(url: url, method: .get)
+        // init request
+        APIManager.shared.request(with: model)
+            .sink(receiveCompletion: { completion in
+            switch completion {
+            case .finished:
+                break
+            case .failure(let error):
+                print(error)
+            }
+        }, receiveValue: { response in
+            // publish the data
+            self.userPlaylistSubject.send(response.playlistObjects)
+            
+        }).store(in: &self.cancellables)
+        
     }
 }
