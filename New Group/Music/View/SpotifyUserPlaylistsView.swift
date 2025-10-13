@@ -16,18 +16,21 @@ struct SpotifyUserPlaylistsView: View {
         NavigationView {
             List(viewModel.playlists, id: \.id) { playlist in
                 HStack(alignment: .center, spacing: 16) {
-                    // Capa da playlist
-//                    AsyncImage(url: playlist.images.first?.url.flatMap(URL.init)) { image in
-//                        image
-//                            .resizable()
-//                            .aspectRatio(1, contentMode: .fit)
-//                    } placeholder: {
-//                        ProgressView()
-//                            .frame(width: 80, height: 80)
-//                    }
-//                    .frame(width: 80, height: 80)
-//                    .clipShape(RoundedRectangle(cornerRadius: 12))
-//                    .shadow(radius: 4)
+                    
+                    ForEach(playlist.images, id: \.url){ image in
+                        
+                        
+                        AsyncImage(url: URL(string: "\(image.url)")) { image in
+                            image
+                                .aspectRatio(contentMode: .fit)
+                        } placeholder: {
+                            ProgressView()
+                                .frame(width: 80, height: 80)
+                        }
+                        .frame(width: 80, height: 80)
+                        .shadow(radius: 4)
+
+                    }
                     
                     // Informações
                     VStack(alignment: .leading, spacing: 6) {

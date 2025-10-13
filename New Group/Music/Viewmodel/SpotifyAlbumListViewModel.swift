@@ -25,6 +25,7 @@ class SpotifyAlbumListViewModel: ObservableObject {
         // set artist id for request
         DataProvider.shared.getArtistAlbums(id: donLSpotifyID)
         DataProvider.shared.getUserPlaylists(userID: "larry4us")
+        
     }
     
     func getData() {
@@ -37,6 +38,14 @@ class SpotifyAlbumListViewModel: ObservableObject {
                 self.setAlbumImageUrls(with: items)
             }).store(in: &cancellables)
         
+    }
+    
+    private func limitImagesURLCount(to count: Int) -> [URL] {
+        playlists.flatMap { playlist in
+            playlist.images
+                .prefix(count)
+                .compactMap { URL(string: $0.url) }
+        }
     }
     
     private func subscribeToDataProviders() {
