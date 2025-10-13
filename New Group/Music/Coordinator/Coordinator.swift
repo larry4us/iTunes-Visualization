@@ -41,7 +41,7 @@ class Coordinator: ObservableObject {
         case .audioPreview(let url):
             AudioPreviewView(previewUrlString: url)
         case .spotifyHome:
-            SpotifyAlbumListView(viewModel: self.spotifyViewModel)
+            SpotifyHomeContainerView(coordinator: self)
         }
     
     }
