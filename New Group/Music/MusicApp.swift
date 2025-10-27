@@ -9,10 +9,21 @@ import SwiftUI
 
 @main
 struct MusicApp: App {
-    
+
     var body: some Scene {
         WindowGroup {
-            MainCoordinatorView()
+            // MainCoordinatorView()
+            UIKitSceneWrapper()
         }
     }
+}
+
+struct UIKitSceneWrapper: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> UIViewController {
+        let delegate = SceneDelegate()
+        let viewController = delegate.rootViewController
+        return viewController
+    }
+
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
 }
