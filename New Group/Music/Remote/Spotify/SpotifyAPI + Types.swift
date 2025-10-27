@@ -12,7 +12,10 @@ extension API.Spotify {
     enum Types {
         
         enum Response {
-
+            struct PlaylistResponse: Decodable {
+                let id: String
+                let name: String
+            }
         }
         
         enum Request {
@@ -20,6 +23,19 @@ extension API.Spotify {
             
             struct Search: Encodable {
                 var term: String
+            }
+            
+            struct CreatePlaylist: Encodable {
+                var name: String
+                let description: String?
+                let publicPlaylist: Bool
+                
+                
+                enum CodingKeys: String, CodingKey {
+                    case name
+                    case description
+                    case publicPlaylist = "public"
+                }
             }
         }
         
@@ -40,12 +56,30 @@ extension API.Spotify {
         enum Endpoint {
             case search(query: String)
             case lookup(id: Int)
+            case createPlaylist(userID: String)
             
             var url: URL {
                 var components = URLComponents()
                 components.scheme = "https"
-                components.host = "accounts.spotify.com"
-                components.path = "/api/token"
+                components.host = "api.spotify.com"
+                
+                switch self {
+                case .search(let query):
+                    components.path = "/search"
+                    components.queryItems = [
+                        URLQueryItem(name: "term", value: query),
+                        URLQueryItem(name: "media", value: "music"),
+                        URLQueryItem(name: "attribute", value: "artistTerm")
+                    ]
+                case .lookup(let id):
+                    components.path = "/lookup"
+                    components.queryItems = [
+                        URLQueryItem(name: "id", value: "\(id)")
+                    ]
+                case .createPlaylist(let userID):
+                    components.path = "/v1/users/\(userID)/playlists"
+                }
+                
                 return components.url!
             }
         }

@@ -68,4 +68,9 @@ extension DataProvider {
         }).store(in: &self.cancellables)
         
     }
+    
+    func makeNewPlaylist(userID: String, name: String) {
+        let url = URL(string: "https://api.spotify.com/v1/users/\(userID)/playlists")
+        let model = APIManager<Response.UserPlaylist>.RequestModel(url: url, method: .post)
+    }
 }

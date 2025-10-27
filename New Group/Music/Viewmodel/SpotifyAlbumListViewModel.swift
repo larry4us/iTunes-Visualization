@@ -5,16 +5,27 @@
 //  Created by Pedro Larry Rodrigues Lopes on 06/10/25.
 //
 
-
 import Foundation
 import Combine
 
+
+/// This viewmodel is designed to studies purposes. That's why it uses two approaches for fetching data:
+/// Combine and Async/Await.
 class SpotifyAlbumListViewModel: ObservableObject {
+    
     typealias Response = API.Spotify.Types.Response
+    typealias Request = API.Spotify.Types.Request
+    
+    // Combine Settings
     private var cancellables = Set<AnyCancellable>()
+    
+    // API client fetching
+    private var client = API.Spotify.Client()
+    
+    // API Settings
     private var donLSpotifyID = "6U98XWjrUPnPtPBjEprDmu"
     
-    // async publishable data.
+    // Async publishable data.
     @Published var albumList: Array<Response.Item> = []
     @Published var albumImageUrls: Array<URL> = []
     @Published var playlists: Array<API.Spotify.Types.Response.PlaylistObject> = []
@@ -64,7 +75,7 @@ class SpotifyAlbumListViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] playlists in
                 guard let self = self else { return }
-                print("🎵 Received playlists:", playlists.map(\.name))
+                //print("🎵 Received playlists:", playlists.map(\.name))
                 self.playlists = playlists
             }
             .store(in: &cancellables)
@@ -79,4 +90,29 @@ class SpotifyAlbumListViewModel: ObservableObject {
             }
         }
     }
+    
+    //MARK: Abordagem mais moderna de manipulação da playlist
+    
+    func createNewPlaylist(named name: String) async -> API.Spotify.Types.Response.PlaylistResponse? {
+        
+        let body = Request.CreatePlaylist(
+            name: "Playlist mais cool do mundo",
+            description: "Fumaça pro ar",
+            publicPlaylist: false
+        )
+        
+        do {
+            let response: API.Spotify.Types.Response.PlaylistResponse = try await client.post(
+                to: .createPlaylist(
+                    userID: "larry4us"
+                ),
+                body: body
+            )
+            return response
+        } catch {
+            print(error.localizedDescription)
+            return nil
+        }
+    }
+    
 }

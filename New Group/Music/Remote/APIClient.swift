@@ -63,9 +63,7 @@ extension API {
             } catch let error {
                 throw API.Types.Error.generic(reason: "\(error)")
             }
-        }
-        
-        
+        }    
     }
 }
 

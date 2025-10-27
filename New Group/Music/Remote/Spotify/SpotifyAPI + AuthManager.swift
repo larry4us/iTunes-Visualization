@@ -37,6 +37,24 @@ extension API.Spotify {
             return components.url
         }()
         
+        func getAccessToken() async throws -> String {
+            guard let url = Self.tokenURL else {
+                throw URLError(.badURL)
+            }
+            var req = URLRequest(url: url)
+            req.httpMethod = "POST"
+            req.setValue(Self.authKey, forHTTPHeaderField: "Authorization")
+            req.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+            req.httpBody = "grant_type=client_credentials".data(using: .utf8)
+            
+            let (data, response) = try await URLSession.shared.data(for: req)
+            guard let http = response as? HTTPURLResponse, 200..<300 ~= http.statusCode else {
+                throw URLError(.badServerResponse)
+            }
+            let decoded = try JSONDecoder().decode(API.Spotify.Types.Response.AccessToken.self, from: data)
+            return decoded.token ?? ""
+        }
+        
         /// Request method for access token.
         func getAccessToken() -> AnyPublisher<String, Error> {
             // strong token url
@@ -65,9 +83,9 @@ extension API.Spotify {
                     }
                     return data
                 }
-                // decode the data with AccessToken decodable model
+            // decode the data with AccessToken decodable model
                 .decode(type: Types.Response.AccessToken.self, decoder: decoder)
-                // reinforce for decoded data
+            // reinforce for decoded data
                 .map { accessToken -> String in
                     guard let token = accessToken.token else {
                         print("The access token is not fetched.")
@@ -75,11 +93,12 @@ extension API.Spotify {
                     }
                     return token
                 }
-                // main thread transactions
+            // main thread transactions
                 .receive(on: RunLoop.main)
-                // publisher spiral for AnyPublisher<String, Error>
+            // publisher spiral for AnyPublisher<String, Error>
                 .eraseToAnyPublisher()
         }
         
     }
+    
 }
