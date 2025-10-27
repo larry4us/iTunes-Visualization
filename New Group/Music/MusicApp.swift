@@ -6,24 +6,14 @@
 //
 
 import SwiftUI
+import UIKit
 
-@main
-struct MusicApp: App {
-
-    var body: some Scene {
-        WindowGroup {
-            // MainCoordinatorView()
-            UIKitSceneWrapper()
-        }
+@UIApplicationMain
+class AppDelegate: UIResponder, UIApplicationDelegate {
+    func application(_ application: UIApplication,
+                     configurationForConnecting connectingSceneSession: UISceneSession,
+                     options: UIScene.ConnectionOptions) -> UISceneConfiguration {
+        return UISceneConfiguration(name: "Default Configuration",
+                                    sessionRole: connectingSceneSession.role)
     }
-}
-
-struct UIKitSceneWrapper: UIViewControllerRepresentable {
-    func makeUIViewController(context: Context) -> UIViewController {
-        let delegate = SceneDelegate()
-        let viewController = delegate.rootViewController
-        return viewController
-    }
-
-    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
 }
