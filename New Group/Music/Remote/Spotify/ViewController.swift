@@ -112,7 +112,7 @@ class ViewController: UIViewController {
 
     @objc func didTapConnect(_ button: UIButton) {
         guard let sessionManager = sessionManager else { return }
-        sessionManager.initiateSession(with: scopes, options: .clientOnly, campaign: "ios_manual_login")
+        sessionManager.initiateSession(with: scopes, options: .default, campaign: "ios_manual_login")
     }
 
     // MARK: - Private Helpers

@@ -3,23 +3,22 @@
 <plist version="1.0">
 <dict>
 	<key>UIApplicationSceneManifest</key>
-<dict>
-    <key>UISceneConfigurations</key>
-    <dict>
-        <key>UIWindowSceneSessionRoleApplication</key>
-        <array>
-            <dict>
-                <key>UISceneConfigurationName</key>
-                <string>Default Configuration</string>
-                <key>UISceneDelegateClassName</key>
-                <string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
-                <key>UISceneStoryboardFile</key>
-                <string></string>
-            </dict>
-        </array>
-    </dict>
-</dict>
-
+	<dict>
+		<key>UISceneConfigurations</key>
+		<dict>
+			<key>UIWindowSceneSessionRoleApplication</key>
+			<array>
+				<dict>
+					<key>UISceneClassName</key>
+					<string>Default Configuration</string>
+					<key>UISceneConfigurationName</key>
+					<string>Default Configuration</string>
+					<key>UISceneDelegateClassName</key>
+					<string>$(PRODUCT_MODULE_NAME).SceneDelegate</string>
+				</dict>
+			</array>
+		</dict>
+	</dict>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
