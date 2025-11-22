@@ -82,7 +82,7 @@ Para rodar o projeto, você precisará de uma conta de desenvolvedor no Spotify 
 
 -----
 
-## 🧠 Aprendizados Chave
+##  Aprendizados
 
 Este projeto serviu para consolidar os seguintes conceitos:
 
